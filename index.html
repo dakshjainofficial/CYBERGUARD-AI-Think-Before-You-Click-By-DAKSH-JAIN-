@@ -1,0 +1,1995 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CYBERGUARD AI - Think Before You Click ~ By DAKSH JAIN</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Space+Mono:wght@400;700&display=swap');
+
+    :root {
+      --cyber-blue: #00f3ff;
+      --cyber-pink: #ff006e;
+      --cyber-purple: #8b5cf6;
+      --cyber-green: #00ff9f;
+      --dark-bg: #0a0a0f;
+      --dark-card: #13131a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Space Mono', monospace;
+      background: var(--dark-bg);
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    .cyber-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+    }
+
+    /* Animated Background */
+    .cyber-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.15;
+      background:
+        linear-gradient(45deg, transparent 30%, var(--cyber-blue) 30%, var(--cyber-blue) 50%, transparent 50%),
+        linear-gradient(-45deg, transparent 30%, var(--cyber-purple) 30%, var(--cyber-purple) 50%, transparent 50%);
+      background-size: 200px 200px;
+      animation: bg-scroll 20s linear infinite;
+    }
+
+    @keyframes bg-scroll {
+      0% {
+        background-position: 0 0, 100px 100px;
+      }
+
+      100% {
+        background-position: 200px 200px, 300px 300px;
+      }
+    }
+
+    /* Glassmorphism Cards */
+    .glass-card {
+      background: rgba(19, 19, 26, 0.7);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 243, 255, 0.2);
+      border-radius: 16px;
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .glass-card:hover {
+      border-color: rgba(0, 243, 255, 0.5);
+      box-shadow:
+        0 12px 48px rgba(0, 243, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    /* Neon Glow */
+    .neon-glow {
+      text-shadow:
+        0 0 10px var(--cyber-blue),
+        0 0 20px var(--cyber-blue),
+        0 0 30px var(--cyber-blue);
+    }
+
+    .neon-border {
+      box-shadow:
+        0 0 10px var(--cyber-blue),
+        inset 0 0 10px rgba(0, 243, 255, 0.1);
+    }
+
+    /* Scan Animation */
+    .scan-line {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyber-blue), transparent);
+      animation: scan 2s ease-in-out infinite;
+    }
+
+    @keyframes scan {
+
+      0%,
+      100% {
+        top: 0;
+        opacity: 0;
+      }
+
+      50% {
+        top: 100%;
+        opacity: 1;
+      }
+    }
+
+    /* Pulse Animation */
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+      }
+    }
+
+    .pulse {
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* Terminal Effect */
+    .terminal {
+      font-family: 'Space Mono', monospace;
+      background: #000;
+      border: 2px solid var(--cyber-green);
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 255, 159, 0.3);
+    }
+
+    .terminal-text {
+      color: var(--cyber-green);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* Risk Level Colors */
+    .risk-safe {
+      color: #00ff9f;
+    }
+
+    .risk-low {
+      color: #ffd60a;
+    }
+
+    .risk-medium {
+      color: #ff9500;
+    }
+
+    .risk-high {
+      color: #ff006e;
+    }
+
+    .risk-critical {
+      color: #ff0000;
+    }
+
+    .risk-bg-safe {
+      background: rgba(0, 255, 159, 0.1);
+      border-color: #00ff9f;
+    }
+
+    .risk-bg-low {
+      background: rgba(255, 214, 10, 0.1);
+      border-color: #ffd60a;
+    }
+
+    .risk-bg-medium {
+      background: rgba(255, 149, 0, 0.1);
+      border-color: #ff9500;
+    }
+
+    .risk-bg-high {
+      background: rgba(255, 0, 110, 0.1);
+      border-color: #ff006e;
+    }
+
+    .risk-bg-critical {
+      background: rgba(255, 0, 0, 0.1);
+      border-color: #ff0000;
+    }
+
+    /* Button Styles */
+    .cyber-button {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .cyber-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .cyber-button:hover::before {
+      left: 100%;
+    }
+
+    /* Counter Animation */
+    @keyframes countUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .count-up {
+      animation: countUp 0.5s ease-out;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--dark-bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--cyber-blue);
+      border-radius: 4px;
+    }
+
+    /* Map Animation */
+    @keyframes ping {
+      0% {
+        transform: scale(0.8);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.2);
+        opacity: 0.5;
+      }
+
+      100% {
+        transform: scale(0.8);
+        opacity: 1;
+      }
+    }
+
+    .threat-ping {
+      animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      border: 3px solid rgba(0, 243, 255, 0.1);
+      border-top: 3px solid var(--cyber-blue);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Fade In */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    .stagger-1 {
+      animation-delay: 0.1s;
+      opacity: 0;
+      animation-fill-mode: forwards;
+    }
+
+    .stagger-2 {
+      animation-delay: 0.2s;
+      opacity: 0;
+      animation-fill-mode: forwards;
+    }
+
+    .stagger-3 {
+      animation-delay: 0.3s;
+      opacity: 0;
+      animation-fill-mode: forwards;
+    }
+
+    .stagger-4 {
+      animation-delay: 0.4s;
+      opacity: 0;
+      animation-fill-mode: forwards;
+    }
+
+    /* Accessibility Mode */
+    .accessibility-mode {
+      filter: contrast(1.2);
+    }
+
+    .accessibility-mode * {
+      font-family: Arial, sans-serif !important;
+      letter-spacing: normal !important;
+    }
+
+    .accessibility-mode .glass-card {
+      background: #000 !important;
+      border: 2px solid #fff !important;
+      backdrop-filter: none !important;
+    }
+
+    .accessibility-mode .neon-glow {
+      text-shadow: none !important;
+      color: #fff !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // ============================================
+    // API Configuration
+    // ============================================
+    const API_URL = 'http://localhost:5000/api';
+
+    // ============================================
+    // MAIN APP COMPONENT
+    // ============================================
+    function App() {
+      const [currentPage, setCurrentPage] = useState('landing');
+      const [userId] = useState('user_' + Math.random().toString(36).substr(2, 9));
+      const [scamsPreventedToday, setScamsPreventedToday] = useState(247);
+      const [accessibilityMode, setAccessibilityMode] = useState(false);
+
+      useEffect(() => {
+        if (accessibilityMode) {
+          document.body.classList.add('accessibility-mode');
+        } else {
+          document.body.classList.remove('accessibility-mode');
+        }
+      }, [accessibilityMode]);
+
+      useEffect(() => {
+        fetch(`${API_URL}/analytics`)
+          .then(res => res.json())
+          .then(data => setScamsPreventedToday(data.scamsPreventedToday || 247))
+          .catch(() => { });
+
+        const interval = setInterval(() => {
+          setScamsPreventedToday(prev => prev + Math.floor(Math.random() * 3));
+        }, 5000);
+
+        return () => clearInterval(interval);
+      }, []);
+
+      return (
+        <>
+          <div className="cyber-bg"></div>
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            {currentPage === 'landing' && (
+              <LandingPage
+                setPage={setCurrentPage}
+                scamsPreventedToday={scamsPreventedToday}
+                accessibilityMode={accessibilityMode}
+                setAccessibilityMode={setAccessibilityMode}
+              />
+            )}
+            {currentPage === 'dashboard' && <Dashboard userId={userId} setPage={setCurrentPage} />}
+            {currentPage === 'admin' && <AdminDashboard setPage={setCurrentPage} />}
+            {currentPage === 'url-scanner' && <URLScanner userId={userId} setPage={setCurrentPage} />}
+            {currentPage === 'message-analyzer' && <MessageAnalyzer userId={userId} setPage={setCurrentPage} />}
+            {currentPage === 'password-checker' && <PasswordChecker userId={userId} setPage={setCurrentPage} />}
+            {currentPage === 'file-scanner' && <FileScanner userId={userId} setPage={setCurrentPage} />}
+            {currentPage === 'threat-map' && <ThreatMap setPage={setCurrentPage} />}
+            {currentPage === 'learn' && <LearningCenter setPage={setCurrentPage} />}
+            {currentPage === 'report-scam' && <ReportScam userId={userId} setPage={setCurrentPage} />}
+            {currentPage === 'privacy-scanner' && <PrivacyScanner userId={userId} setPage={setCurrentPage} />}
+            <ChatAssistant />
+          </div>
+        </>
+      );
+    }
+
+    // ============================================
+    // LANDING PAGE
+    // ============================================
+    function LandingPage({ setPage, scamsPreventedToday, accessibilityMode, setAccessibilityMode }) {
+      return (
+        <div className="min-h-screen">
+          {/* Navigation */}
+          <nav className="glass-card mx-4 mt-4 p-4">
+            <div className="max-w-7xl mx-auto flex justify-between items-center">
+              <h1 className="cyber-title text-2xl neon-glow">CYBERGUARD AI</h1>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setPage('dashboard')}
+                  className="cyber-button px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition"
+                >
+                  Dashboard
+                </button>
+                <button
+                  onClick={() => setPage('admin')}
+                  className="cyber-button px-6 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold transition"
+                >
+                  Admin
+                </button>
+                <button
+                  onClick={() => setAccessibilityMode(!accessibilityMode)}
+                  className="cyber-button px-4 py-2 border-2 border-yellow-500 text-yellow-500 rounded-lg font-semibold transition hover:bg-yellow-500 hover:text-black"
+                  title="Toggle High Contrast / Accessibility Mode"
+                >
+                  {accessibilityMode ? 'Disable A11y' : 'Enable A11y'}
+                </button>
+              </div>
+            </div>
+          </nav>
+
+          {/* Hero Section */}
+          <div className="max-w-7xl mx-auto px-4 py-20">
+            <div className="text-center mb-16 fade-in">
+              <h2 className="cyber-title text-6xl md:text-8xl neon-glow mb-6">
+                THINK BEFORE
+                <br />
+                <span style={{ color: 'var(--cyber-pink)' }}>YOU CLICK</span>
+              </h2>
+              <p className="text-xl md:text-2xl text-gray-300 mb-8">
+                Your Personal Cyber Safety Assistant
+              </p>
+              <div className="inline-block glass-card px-8 py-4 mb-8">
+                <p className="text-sm text-gray-400 mb-2">Scams Prevented Today</p>
+                <p className="cyber-title text-5xl count-up" style={{ color: 'var(--cyber-green)' }}>
+                  {scamsPreventedToday.toLocaleString()}
+                </p>
+              </div>
+            </div>
+
+            {/* Action Grid */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+              <ActionCard
+                icon="🔗"
+                title="Scan Link"
+                description="Detect phishing URLs and malicious websites"
+                onClick={() => setPage('url-scanner')}
+                delay="stagger-1"
+              />
+              <ActionCard
+                icon="💬"
+                title="Scan Message"
+                description="Analyze suspicious emails and texts"
+                onClick={() => setPage('message-analyzer')}
+                delay="stagger-2"
+              />
+              <ActionCard
+                icon="🔐"
+                title="Check Password"
+                description="Test password strength with attack simulation"
+                onClick={() => setPage('password-checker')}
+                delay="stagger-3"
+              />
+              <ActionCard
+                icon="📁"
+                title="Scan File"
+                description="Detect malware and dangerous file types"
+                onClick={() => setPage('file-scanner')}
+                delay="stagger-4"
+              />
+              <ActionCard
+                icon="🎓"
+                title="Learn Security"
+                description="Interactive lessons on staying safe online"
+                onClick={() => setPage('learn')}
+                delay="stagger-1"
+              />
+              <ActionCard
+                icon="🌍"
+                title="Live Threat Map"
+                description="Real-time global cyber attack visualization"
+                onClick={() => setPage('threat-map')}
+                delay="stagger-2"
+              />
+              <ActionCard
+                icon="🚩"
+                title="Report Scam"
+                description="Help protect others by reporting new threats"
+                onClick={() => setPage('report-scam')}
+                delay="stagger-3"
+              />
+              <ActionCard
+                icon="🛡️"
+                title="Privacy Scanner"
+                description="Analyze social media privacy settings"
+                onClick={() => setPage('privacy-scanner')}
+                delay="stagger-4"
+              />
+            </div>
+
+            {/* Features */}
+            <div className="grid md:grid-cols-3 gap-8 fade-in stagger-3">
+              <FeatureCard
+                title="Prevention"
+                description="Stop threats before they reach you with intelligent scanning"
+              />
+              <FeatureCard
+                title="Awareness"
+                description="Learn to recognize scams with easy-to-understand explanations"
+              />
+              <FeatureCard
+                title="Education"
+                description="Build lasting cybersecurity knowledge through interactive lessons"
+              />
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function ActionCard({ icon, title, description, onClick, delay }) {
+      return (
+        <div
+          onClick={onClick}
+          className={`glass-card p-6 cursor-pointer hover:scale-105 transition-all fade-in ${delay}`}
+        >
+          <div className="text-5xl mb-4">{icon}</div>
+          <h3 className="cyber-title text-xl mb-2" style={{ color: 'var(--cyber-blue)' }}>
+            {title}
+          </h3>
+          <p className="text-gray-400 text-sm">{description}</p>
+        </div>
+      );
+    }
+
+    function FeatureCard({ title, description }) {
+      return (
+        <div className="glass-card p-6 text-center">
+          <h3 className="cyber-title text-2xl mb-3" style={{ color: 'var(--cyber-green)' }}>
+            {title}
+          </h3>
+          <p className="text-gray-400">{description}</p>
+        </div>
+      );
+    }
+
+    // ============================================
+    // URL SCANNER
+    // ============================================
+    function URLScanner({ userId, setPage }) {
+      const [url, setUrl] = useState('');
+      const [loading, setLoading] = useState(false);
+      const [result, setResult] = useState(null);
+
+      const handleScan = async () => {
+        if (!url.trim()) return;
+
+        setLoading(true);
+        setResult(null);
+
+        try {
+          const response = await fetch(`${API_URL}/scan/url`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url, userId })
+          });
+          const data = await response.json();
+          setTimeout(() => {
+            setResult(data);
+            setLoading(false);
+          }, 1500);
+        } catch (error) {
+          setLoading(false);
+          setResult({ error: 'Scan failed' });
+        }
+      };
+
+      return (
+        <div className="min-h-screen p-4">
+          <div className="max-w-4xl mx-auto">
+            <BackButton setPage={setPage} />
+
+            <div className="glass-card p-8 mb-6">
+              <h2 className="cyber-title text-4xl neon-glow mb-6">🔗 URL SCANNER</h2>
+
+              <div className="mb-6">
+                <input
+                  type="text"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="Paste suspicious URL here..."
+                  className="w-full bg-black/50 border-2 border-cyan-500/30 rounded-lg px-4 py-3 text-white focus:border-cyan-500 focus:outline-none transition"
+                  onKeyPress={(e) => e.key === 'Enter' && handleScan()}
+                />
+              </div>
+
+              <button
+                onClick={handleScan}
+                disabled={loading || !url.trim()}
+                className="cyber-button w-full py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed transition"
+              >
+                {loading ? 'SCANNING...' : 'SCAN URL'}
+              </button>
+            </div>
+
+            {loading && <LoadingAnimation />}
+            {result && result.error && (
+              <div className="glass-card p-6 border-2 border-red-500 text-red-500 text-center fade-in">
+                <div className="text-4xl mb-2">⚠️</div>
+                <div className="font-bold text-xl mb-1">SCAN FAILED</div>
+                <p>{result.error}</p>
+                <div className="mt-4 text-sm text-gray-400">
+                  Make sure the backend server is running! Run <code>start.bat</code> to start it.
+                </div>
+              </div>
+            )}
+            {result && !result.error && <URLResult result={result} />}
+          </div>
+        </div>
+      );
+    }
+
+    function URLResult({ result }) {
+      const getRiskColor = (level) => {
+        const colors = {
+          safe: 'risk-safe',
+          low: 'risk-low',
+          medium: 'risk-medium',
+          high: 'risk-high',
+          critical: 'risk-critical'
+        };
+        return colors[result.riskLevel] || 'risk-safe';
+      };
+
+      const getRiskBg = (level) => {
+        const colors = {
+          safe: 'risk-bg-safe',
+          low: 'risk-bg-low',
+          medium: 'risk-bg-medium',
+          high: 'risk-bg-high',
+          critical: 'risk-bg-critical'
+        };
+        return colors[result.riskLevel] || 'risk-bg-safe';
+      };
+
+      return (
+        <div className="terminal fade-in">
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-4 border-b border-gray-800 pb-4">
+              <span className="terminal-text">SCAN STATUS: COMPLETE</span>
+              <div className="flex items-center gap-4">
+                {result.riskPercentage === 0 ? (
+                  <div className="bg-green-500/20 text-green-400 border border-green-500 px-4 py-1 rounded-full font-bold animate-pulse">
+                    🛡️ 100% SAFE
+                  </div>
+                ) : result.riskPercentage >= 70 ? (
+                  <div className="bg-red-500/20 text-red-500 border border-red-500 px-4 py-1 rounded-full font-bold animate-pulse">
+                    🚫 VERY UNSAFE
+                  </div>
+                ) : (
+                  <div className="bg-yellow-500/20 text-yellow-500 border border-yellow-500 px-4 py-1 rounded-full font-bold">
+                    ⚠️ POTENTIAL RISK
+                  </div>
+                )}
+                <span className={`cyber-title text-2xl ${getRiskColor()}`}>
+                  {result.riskLevel.toUpperCase()}
+                </span>
+              </div>
+            </div>
+
+            <div className={`glass-card border-2 ${getRiskBg()} p-4 mb-4`}>
+              <div className="grid grid-cols-2 gap-4 text-center">
+                <div className="border-r border-gray-700">
+                  <div className="cyber-title text-5xl mb-1" style={{ color: 'var(--cyber-blue)' }}>
+                    {result.riskPercentage}%
+                  </div>
+                  <div className="text-xs text-gray-400">RISK SCORE</div>
+                </div>
+                <div>
+                  <div className="cyber-title text-5xl mb-1" style={{ color: result.riskPercentage === 0 ? 'var(--cyber-green)' : 'var(--cyber-pink)' }}>
+                    {100 - result.riskPercentage}%
+                  </div>
+                  <div className="text-xs text-gray-400">SAFETY SCORE</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <div className="terminal-text font-bold mb-2">EXPLANATION:</div>
+              <div className="text-white bg-black/50 p-4 rounded">{result.explanation}</div>
+            </div>
+
+            {result.indicators && result.indicators.length > 0 && (
+              <div className="mb-4">
+                <div className="terminal-text font-bold mb-2">THREAT INDICATORS:</div>
+                {result.indicators.map((indicator, idx) => (
+                  <div key={idx} className="text-yellow-400 mb-2 pl-4">
+                    • {indicator}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="glass-card p-4 bg-blue-900/20">
+              <div className="terminal-text font-bold mb-2">RECOMMENDATION:</div>
+              <div className="text-white">{result.recommendation}</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ============================================
+    // MESSAGE ANALYZER
+    // ============================================
+    function MessageAnalyzer({ userId, setPage }) {
+      const [message, setMessage] = useState('');
+      const [simpleMode, setSimpleMode] = useState(false);
+      const [loading, setLoading] = useState(false);
+      const [result, setResult] = useState(null);
+
+      const handleScan = async () => {
+        if (!message.trim()) return;
+
+        setLoading(true);
+        setResult(null);
+
+        try {
+          const response = await fetch(`${API_URL}/scan/message`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message, userId, simpleMode })
+          });
+          const data = await response.json();
+          setTimeout(() => {
+            setResult(data);
+            setLoading(false);
+          }, 1500);
+        } catch (error) {
+          setLoading(false);
+        }
+      };
+
+      return (
+        <div className="min-h-screen p-4">
+          <div className="max-w-4xl mx-auto">
+            <BackButton setPage={setPage} />
+
+            <div className="glass-card p-8 mb-6">
+              <h2 className="cyber-title text-4xl neon-glow mb-6">💬 MESSAGE ANALYZER</h2>
+
+              <div className="mb-4">
+                <textarea
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Paste suspicious message, email, or WhatsApp text here..."
+                  rows="8"
+                  className="w-full bg-black/50 border-2 border-cyan-500/30 rounded-lg px-4 py-3 text-white focus:border-cyan-500 focus:outline-none transition resize-none"
+                />
+              </div>
+
+              <div className="flex items-center gap-3 mb-6">
+                <input
+                  type="checkbox"
+                  id="simpleMode"
+                  checked={simpleMode}
+                  onChange={(e) => setSimpleMode(e.target.checked)}
+                  className="w-5 h-5"
+                />
+                <label htmlFor="simpleMode" className="text-cyan-400">
+                  Explain Like I'm 10 (Simple Mode)
+                </label>
+              </div>
+
+              <button
+                onClick={handleScan}
+                disabled={loading || !message.trim()}
+                className="cyber-button w-full py-4 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 rounded-lg font-bold text-lg disabled:opacity-50 transition"
+              >
+                {loading ? 'ANALYZING...' : 'ANALYZE MESSAGE'}
+              </button>
+            </div>
+
+            {loading && <LoadingAnimation />}
+            {result && result.error && (
+              <div className="glass-card p-6 border-2 border-red-500 text-red-500 text-center fade-in">
+                <div className="text-4xl mb-2">⚠️</div>
+                <div className="font-bold text-xl mb-1">ANALYSIS FAILED</div>
+                <p>{result.error}</p>
+                <div className="mt-4 text-sm text-gray-400">
+                  Check if the backend server is online (Port 5000).
+                </div>
+              </div>
+            )}
+            {result && !result.error && <MessageResult result={result} />}
+          </div>
+        </div>
+      );
+    }
+
+    function MessageResult({ result }) {
+      const getRiskColor = (level) => {
+        const colors = {
+          safe: 'risk-safe',
+          low: 'risk-low',
+          medium: 'risk-medium',
+          high: 'risk-high',
+          critical: 'risk-critical'
+        };
+        return colors[result.riskLevel] || 'risk-safe';
+      };
+
+      return (
+        <div className="terminal fade-in">
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-4 border-b border-gray-800 pb-4">
+              <span className="terminal-text">ANALYSIS STATUS: COMPLETE</span>
+              <div className="flex items-center gap-4">
+                {parseInt(result.scamProbability) === 0 ? (
+                  <div className="bg-green-500/20 text-green-400 border border-green-500 px-4 py-1 rounded-full font-bold animate-pulse">
+                    🛡️ 100% SAFE
+                  </div>
+                ) : parseInt(result.scamProbability) >= 70 ? (
+                  <div className="bg-red-500/20 text-red-500 border border-red-500 px-4 py-1 rounded-full font-bold animate-pulse">
+                    🚫 VERY UNSAFE
+                  </div>
+                ) : (
+                  <div className="bg-yellow-500/20 text-yellow-500 border border-yellow-500 px-4 py-1 rounded-full font-bold">
+                    ⚠️ POTENTIAL SCAM
+                  </div>
+                )}
+                <span className={`cyber-title text-2xl ${getRiskColor()}`}>
+                  {result.riskLevel.toUpperCase()}
+                </span>
+              </div>
+            </div>
+
+            <div className="glass-card border-2 risk-bg-medium p-4 mb-4">
+              <div className="text-center">
+                <div className="cyber-title text-6xl mb-2 risk-medium">
+                  {result.scamProbability}
+                </div>
+                <div className="text-sm text-gray-400">SCAM PROBABILITY</div>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <div className="terminal-text font-bold mb-2">EXPLANATION:</div>
+              <div className="text-white bg-black/50 p-4 rounded">{result.explanation}</div>
+            </div>
+
+            {result.highlightedWords && result.highlightedWords.length > 0 && (
+              <div className="mb-4">
+                <div className="terminal-text font-bold mb-2">DANGEROUS WORDS DETECTED:</div>
+                <div className="flex flex-wrap gap-2">
+                  {result.highlightedWords.map((word, idx) => (
+                    <span key={idx} className="bg-red-600/30 border border-red-500 px-3 py-1 rounded text-red-400">
+                      {word}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {result.indicators && result.indicators.length > 0 && (
+              <div className="mb-4">
+                <div className="terminal-text font-bold mb-2">WHY IT'S SUSPICIOUS:</div>
+                {result.indicators.map((indicator, idx) => (
+                  <div key={idx} className="text-yellow-400 mb-2 pl-4">
+                    • {indicator}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="glass-card p-4 bg-purple-900/20">
+              <div className="terminal-text font-bold mb-2">RECOMMENDATION:</div>
+              <div className="text-white">{result.recommendation}</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ============================================
+    // PASSWORD CHECKER
+    // ============================================
+    function PasswordChecker({ userId, setPage }) {
+      const [password, setPassword] = useState('');
+      const [showPassword, setShowPassword] = useState(false);
+      const [loading, setLoading] = useState(false);
+      const [result, setResult] = useState(null);
+
+      const handleCheck = async () => {
+        if (!password) return;
+
+        setLoading(true);
+        setResult(null);
+
+        try {
+          const response = await fetch(`${API_URL}/scan/password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password, userId })
+          });
+          const data = await response.json();
+          setTimeout(() => {
+            setResult(data);
+            setLoading(false);
+          }, 2000);
+        } catch (error) {
+          setLoading(false);
+        }
+      };
+
+      return (
+        <div className="min-h-screen p-4">
+          <div className="max-w-4xl mx-auto">
+            <BackButton setPage={setPage} />
+
+            <div className="glass-card p-8 mb-6">
+              <h2 className="cyber-title text-4xl neon-glow mb-6">🔐 PASSWORD STRENGTH CHECKER</h2>
+
+              <div className="mb-6 relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter password to test..."
+                  className="w-full bg-black/50 border-2 border-cyan-500/30 rounded-lg px-4 py-3 text-white focus:border-cyan-500 focus:outline-none transition pr-20"
+                  onKeyPress={(e) => e.key === 'Enter' && handleCheck()}
+                />
+                <button
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-3 text-cyan-400 hover:text-cyan-300"
+                >
+                  {showPassword ? '👁️' : '👁️‍🗨️'}
+                </button>
+              </div>
+
+              <button
+                onClick={handleCheck}
+                disabled={loading || !password}
+                className="cyber-button w-full py-4 bg-gradient-to-r from-green-600 to-cyan-600 hover:from-green-500 hover:to-cyan-500 rounded-lg font-bold text-lg disabled:opacity-50 transition"
+              >
+                {loading ? 'TESTING...' : 'TEST PASSWORD STRENGTH'}
+              </button>
+            </div>
+
+            {loading && <LoadingAnimation message="Running attack simulations..." />}
+            {result && result.error && (
+              <div className="glass-card p-6 border-2 border-red-500 text-red-500 text-center fade-in">
+                <div className="text-4xl mb-2">⚠️</div>
+                <div className="font-bold text-xl mb-1">THREAT TEST FAILED</div>
+                <p>{result.error}</p>
+              </div>
+            )}
+            {result && !result.error && <PasswordResult result={result} />}
+          </div>
+        </div>
+      );
+    }
+
+    function PasswordResult({ result }) {
+      const getStrengthColor = (strength) => {
+        const colors = {
+          'very weak': 'text-red-500',
+          'weak': 'text-orange-500',
+          'moderate': 'text-yellow-500',
+          'strong': 'text-green-500',
+          'very strong': 'text-cyan-500'
+        };
+        return colors[result.strength] || 'text-gray-500';
+      };
+
+      return (
+        <div className="terminal fade-in">
+          <div className="mb-6">
+            <div className="terminal-text mb-4">PASSWORD ANALYSIS COMPLETE</div>
+
+            <div className={`glass-card border-2 ${result.score >= 70 ? 'border-green-500' : 'border-red-500'} p-6 mb-6`}>
+              <div className="grid grid-cols-2 gap-4 text-center">
+                <div className="border-r border-gray-700">
+                  <div className={`cyber-title text-5xl mb-1 ${getStrengthColor(result.strength)}`}>
+                    {result.strength.toUpperCase()}
+                  </div>
+                  <div className="text-xs text-gray-400">STRENGTH RATING</div>
+                </div>
+                <div>
+                  <div className="cyber-title text-5xl mb-1" style={{ color: result.score >= 80 ? 'var(--cyber-green)' : result.score >= 50 ? 'var(--cyber-blue)' : 'var(--cyber-pink)' }}>
+                    {result.score}%
+                  </div>
+                  <div className="text-xs text-gray-400">CYBER SAFETY SCORE</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="glass-card p-6 mb-6 bg-black/40">
+              <div className="terminal-text font-bold mb-4">SECURITY CHECKLIST:</div>
+              <div className="grid grid-cols-2 gap-4">
+                <CheckItem label="12+ Characters" checked={password.length >= 12} />
+                <CheckItem label="Special Symbols (@#$)" checked={/[^A-Za-z0-9]/.test(password)} />
+                <CheckItem label="Numbers (0-9)" checked={/[0-9]/.test(password)} />
+                <CheckItem label="Mixed Case (Aa)" checked={/[A-Z]/.test(password) && /[a-z]/.test(password)} />
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <div className="terminal-text font-bold mb-3">CRACK TIME ESTIMATE:</div>
+              <div className="text-3xl font-bold text-yellow-400">{result.crackTime}</div>
+            </div>
+
+            {result.attacks && (
+              <div className="mb-6">
+                <div className="terminal-text font-bold mb-3">ATTACK SIMULATIONS:</div>
+
+                <div className="glass-card p-4 mb-3">
+                  <div className="text-cyan-400 font-bold mb-2">⚡ BRUTE FORCE ATTACK</div>
+                  <div className="text-sm text-gray-400">Attempts per second: {result.attacks.bruteForce.attemptsPerSecond}</div>
+                  <div className="text-sm text-gray-400">Combinations: {result.attacks.bruteForce.combinations}</div>
+                  <div className="text-white mt-2">Time to crack: <span className="text-yellow-400">{result.attacks.bruteForce.timeEstimate}</span></div>
+                </div>
+
+                <div className="glass-card p-4 mb-3">
+                  <div className="text-pink-400 font-bold mb-2">📚 DICTIONARY ATTACK</div>
+                  <div className="text-sm text-gray-400">Status: {result.attacks.dictionary.vulnerable ? 'VULNERABLE ⚠️' : 'PROTECTED ✅'}</div>
+                  <div className="text-white mt-2">Time to crack: <span className="text-yellow-400">{result.attacks.dictionary.timeEstimate}</span></div>
+                </div>
+
+                <div className="glass-card p-4">
+                  <div className="text-purple-400 font-bold mb-2">🖥️ GPU CLUSTER ATTACK</div>
+                  <div className="text-sm text-gray-400">Hardware: {result.attacks.gpuCrack.gpuCluster}</div>
+                  <div className="text-sm text-gray-400">Speed: {result.attacks.gpuCrack.attemptsPerSecond}/sec</div>
+                  <div className="text-white mt-2">Time to crack: <span className="text-yellow-400">{result.attacks.gpuCrack.timeEstimate}</span></div>
+                </div>
+              </div>
+            )}
+
+            {result.warnings && result.warnings.length > 0 && (
+              <div className="mb-6">
+                <div className="terminal-text font-bold mb-2">⚠️ WARNINGS:</div>
+                {result.warnings.map((warning, idx) => (
+                  <div key={idx} className="text-red-400 mb-1 pl-4">• {warning}</div>
+                ))}
+              </div>
+            )}
+
+            {result.suggestions && result.suggestions.length > 0 && (
+              <div className="glass-card p-4 bg-green-900/20">
+                <div className="terminal-text font-bold mb-2">💡 SUGGESTIONS:</div>
+                {result.suggestions.map((suggestion, idx) => (
+                  <div key={idx} className="text-green-400 mb-1 pl-4">• {suggestion}</div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    function CheckItem({ label, checked }) {
+      return (
+        <div className="flex items-center gap-2">
+          <div className={`w-5 h-5 rounded-full flex items-center justify-center text-xs ${checked ? 'bg-green-500/20 text-green-500 border border-green-500' : 'bg-red-500/20 text-red-500 border border-red-500'}`}>
+            {checked ? '✓' : '×'}
+          </div>
+          <span className={checked ? 'text-green-500' : 'text-gray-500'}>{label}</span>
+        </div>
+      );
+    }
+
+    // ============================================
+    // PRIVACY SETTINGS SCANNER
+    // ============================================
+    function PrivacyScanner({ userId, setPage }) {
+      const [url, setUrl] = useState('');
+      const [loading, setLoading] = useState(false);
+      const [result, setResult] = useState(null);
+
+      const handleScan = async () => {
+        if (!url.trim()) return;
+        setLoading(true);
+        setResult(null);
+
+        try {
+          const response = await fetch(`${API_URL}/scan/privacy`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url, userId })
+          });
+          const data = await response.json();
+          setTimeout(() => {
+            setResult(data);
+            setLoading(false);
+          }, 2000);
+        } catch (error) {
+          setLoading(false);
+          setResult({ error: 'Privacy scan failed' });
+        }
+      };
+
+      return (
+        <div className="min-h-screen bg-white text-gray-900 p-8">
+          <div className="max-w-6xl mx-auto">
+            <button
+              onClick={() => setPage('landing')}
+              className="mb-8 flex items-center gap-2 text-gray-600 hover:text-black font-semibold transition"
+            >
+              <span>←</span> Back to Home
+            </button>
+
+            {/* Scanner Box */}
+            <div className="bg-[#F5F3FF] rounded-2xl p-8 border border-[#DDD6FE] mb-12">
+              <div className="flex items-start gap-4 mb-8">
+                <div className="bg-white p-3 rounded-xl shadow-sm border border-[#E9E4FF]">
+                  <span className="text-2xl">🛡️</span>
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-[#1F2937]">Privacy Settings Scanner</h2>
+                  <p className="text-[#6B7280]">Analyze your social media privacy settings for potential vulnerabilities</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <input
+                  type="text"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="https://social-media-profile-url.com"
+                  className="flex-1 bg-white border border-[#DDD6FE] rounded-xl px-6 py-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
+                />
+                <button
+                  onClick={handleScan}
+                  disabled={loading}
+                  className="bg-[#4C1D95] hover:bg-[#3B1575] text-white px-8 py-4 rounded-xl flex items-center gap-2 font-bold transition disabled:opacity-50"
+                >
+                  <span>🔍</span> {loading ? 'Scanning...' : 'Scan'}
+                </button>
+              </div>
+            </div>
+
+            {loading && (
+              <div className="flex flex-col items-center py-20">
+                <div className="w-16 h-16 border-4 border-purple-200 border-t-purple-700 rounded-full animate-spin"></div>
+                <p className="mt-4 text-purple-900 font-bold">Analyzing privacy protocols...</p>
+              </div>
+            )}
+
+            {result && !result.error && (
+              <div className="fade-in">
+                <h3 className="text-xl font-bold mb-6 text-[#1F2937]">Scan Results</h3>
+                <div className="space-y-6">
+                  {result.categories.map((cat, idx) => (
+                    <PrivacyResultCard key={idx} category={cat} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Emergency Resources Section */}
+            <div className="mt-16 pt-12 border-t border-gray-100 fade-in">
+              <div className="flex items-start gap-3 mb-8">
+                <span className="text-red-500 text-2xl font-bold">⚠️</span>
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900">Emergency Resources</h3>
+                  <p className="text-gray-500 text-sm">Immediate support and crisis intervention services</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <EmergencyCard
+                  title="National Domestic Violence Hotline"
+                  description="24/7 confidential support for domestic violence survivors"
+                  buttons={[
+                    { icon: '📞', label: '1-800-799-7233' },
+                    { icon: '🌐', label: 'Website' }
+                  ]}
+                />
+
+                <EmergencyCard
+                  title="Crisis Text Line"
+                  description="Free 24/7 crisis support via text message"
+                  buttons={[
+                    { icon: '💬', label: 'Text HOME to 741741' }
+                  ]}
+                />
+
+                <EmergencyCard
+                  title="RAINN National Sexual Assault Hotline"
+                  description="Confidential support from trained staff"
+                  buttons={[
+                    { icon: '📞', label: '1-800-656-4673' },
+                    { icon: '🌐', label: 'Website' }
+                  ]}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function EmergencyCard({ title, description, buttons }) {
+      return (
+        <div className="bg-white border border-gray-100 rounded-xl p-6 hover:shadow-sm transition">
+          <div className="flex items-center gap-2 mb-2">
+            <h4 className="text-lg font-bold text-gray-900">{title}</h4>
+            <span className="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full font-bold">24/7</span>
+          </div>
+          <p className="text-gray-500 text-sm mb-4">{description}</p>
+          <div className="flex gap-3">
+            {buttons.map((btn, idx) => (
+              <button key={idx} className="flex items-center gap-2 border border-gray-200 rounded-lg px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">
+                <span>{btn.icon}</span>
+                {btn.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    function PrivacyResultCard({ category }) {
+      const isSafe = category.status === 'safe';
+
+      return (
+        <div className={`rounded-xl p-6 border ${isSafe ? 'bg-[#F0FDF4] border-[#DCFCE7]' : 'bg-white border-gray-200'}`}>
+          <div className="flex items-center gap-3 mb-6">
+            <span className={isSafe ? 'text-green-600 font-bold text-xl' : 'text-red-500 font-bold text-xl'}>
+              {category.icon === '✓' ? '✓' : '⚠️'}
+            </span>
+            <h4 className="text-xl font-bold text-[#1F2937]">{category.title}</h4>
+          </div>
+
+          <div className="space-y-6">
+            {category.issues.length > 0 && (
+              <div>
+                <p className="font-bold text-gray-800 mb-3 text-sm">Issues Found:</p>
+                <div className="space-y-2">
+                  {category.issues.map((issue, idx) => (
+                    <div key={idx} className="flex items-center gap-2 text-gray-600 text-sm">
+                      <span className="text-yellow-500">⚠️</span> {issue}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div>
+              <p className="font-bold text-gray-800 mb-3 text-sm">Recommendations:</p>
+              <div className="space-y-2">
+                {category.recommendations.map((rec, idx) => (
+                  <div key={idx} className="flex items-center gap-2 text-gray-600 text-sm">
+                    <span className="text-green-600 font-bold">✓</span> {rec}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    // ============================================
+    // FILE SCANNER
+    // ============================================
+    function FileScanner({ userId, setPage }) {
+      const [fileInfo, setFileInfo] = useState(null);
+      const [loading, setLoading] = useState(false);
+      const [result, setResult] = useState(null);
+      const fileInputRef = useRef(null);
+
+      const handleFileSelect = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          setFileInfo({
+            fileName: file.name,
+            fileSize: file.size,
+            fileType: file.type
+          });
+        }
+      };
+
+      const handleScan = async () => {
+        if (!fileInfo) return;
+
+        setLoading(true);
+        setResult(null);
+
+        try {
+          const response = await fetch(`${API_URL}/scan/file`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...fileInfo, userId })
+          });
+          const data = await response.json();
+          setTimeout(() => {
+            setResult(data);
+            setLoading(false);
+          }, 1800);
+        } catch (error) {
+          setLoading(false);
+        }
+      };
+
+      return (
+        <div className="min-h-screen p-4">
+          <div className="max-w-4xl mx-auto">
+            <BackButton setPage={setPage} />
+
+            <div className="glass-card p-8 mb-6">
+              <h2 className="cyber-title text-4xl neon-glow mb-6">📁 FILE SAFETY SCANNER</h2>
+
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className="border-4 border-dashed border-cyan-500/30 rounded-lg p-12 text-center cursor-pointer hover:border-cyan-500 transition mb-6"
+              >
+                <div className="text-6xl mb-4">📤</div>
+                <p className="text-xl text-gray-400">Click to select file</p>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  onChange={handleFileSelect}
+                  className="hidden"
+                />
+              </div>
+
+              {fileInfo && (
+                <div className="glass-card p-4 mb-6">
+                  <div className="text-cyan-400 font-bold mb-2">SELECTED FILE:</div>
+                  <div className="text-white">{fileInfo.fileName}</div>
+                  <div className="text-sm text-gray-400">
+                    Size: {(fileInfo.fileSize / 1024).toFixed(2)} KB | Type: {fileInfo.fileType || 'Unknown'}
+                  </div>
+                </div>
+              )}
+
+              <button
+                onClick={handleScan}
+                disabled={loading || !fileInfo}
+                className="cyber-button w-full py-4 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 rounded-lg font-bold text-lg disabled:opacity-50 transition"
+              >
+                {loading ? 'SCANNING...' : 'SCAN FILE'}
+              </button>
+            </div>
+
+            {loading && <LoadingAnimation message="Analyzing file structure..." />}
+            {result && result.error && (
+              <div className="glass-card p-6 border-2 border-red-500 text-red-500 text-center fade-in">
+                <div className="text-4xl mb-2">⚠️</div>
+                <div className="font-bold text-xl mb-1">FILE SCAN FAILED</div>
+                <p>{result.error}</p>
+              </div>
+            )}
+            {result && !result.error && <FileResult result={result} />}
+          </div>
+        </div>
+      );
+    }
+
+    function FileResult({ result }) {
+      const getRiskColor = (level) => {
+        const colors = {
+          safe: 'risk-safe',
+          low: 'risk-low',
+          medium: 'risk-medium',
+          high: 'risk-high',
+          critical: 'risk-critical'
+        };
+        return colors[result.riskLevel] || 'risk-safe';
+      };
+
+      return (
+        <div className="terminal fade-in">
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-4 border-b border-gray-800 pb-4">
+              <span className="terminal-text">FILE STATUS: ANALYZED</span>
+              <div className="flex items-center gap-4">
+                {result.riskLevel === 'safe' ? (
+                  <div className="bg-green-500/20 text-green-400 border border-green-500 px-4 py-1 rounded-full font-bold animate-pulse">
+                    🛡️ 100% SAFE
+                  </div>
+                ) : result.riskLevel === 'critical' || result.riskLevel === 'high' ? (
+                  <div className="bg-red-500/20 text-red-500 border border-red-500 px-4 py-1 rounded-full font-bold animate-pulse">
+                    🚫 VERY UNSAFE
+                  </div>
+                ) : (
+                  <div className="bg-yellow-500/20 text-yellow-500 border border-yellow-500 px-4 py-1 rounded-full font-bold">
+                    ⚠️ SUSPICIOUS
+                  </div>
+                )}
+                <span className={`cyber-title text-2xl ${getRiskColor()}`}>
+                  {result.riskLevel.toUpperCase()}
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="glass-card p-4">
+                <div className="text-sm text-gray-400 mb-1">Category</div>
+                <div className="text-cyan-400 font-bold">{result.fileCategory}</div>
+              </div>
+              <div className="glass-card p-4">
+                <div className="text-sm text-gray-400 mb-1">Extension</div>
+                <div className="text-cyan-400 font-bold">{result.fileExtension}</div>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <div className="terminal-text font-bold mb-2">ASSESSMENT:</div>
+              <div className="text-white bg-black/50 p-4 rounded">{result.explanation}</div>
+            </div>
+
+            {result.indicators && result.indicators.length > 0 && (
+              <div className="mb-4">
+                <div className="terminal-text font-bold mb-2">SECURITY INDICATORS:</div>
+                {result.indicators.map((indicator, idx) => (
+                  <div key={idx} className="text-yellow-400 mb-2 pl-4">
+                    • {indicator}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="glass-card p-4 bg-orange-900/20">
+              <div className="terminal-text font-bold mb-2">RECOMMENDATION:</div>
+              <div className="text-white">{result.recommendation}</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ============================================
+    // DASHBOARD
+    // ============================================
+    function Dashboard({ userId, setPage }) {
+      const [userScore, setUserScore] = useState(null);
+
+      useEffect(() => {
+        fetch(`${API_URL}/user/${userId}/score`)
+          .then(res => res.json())
+          .then(data => setUserScore(data))
+          .catch(() => { });
+      }, [userId]);
+
+      return (
+        <div className="min-h-screen p-4">
+          <div className="max-w-6xl mx-auto">
+            <BackButton setPage={setPage} />
+
+            <div className="glass-card p-8 mb-6">
+              <h2 className="cyber-title text-4xl neon-glow mb-6">SECURITY DASHBOARD</h2>
+
+              {userScore && (
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="glass-card p-6 text-center">
+                    <div className="text-sm text-gray-400 mb-2">Security Score</div>
+                    <div className="cyber-title text-5xl text-cyan-400">{userScore.score}</div>
+                    <div className="text-sm text-gray-400 mt-2">/100</div>
+                  </div>
+
+                  <div className="glass-card p-6 text-center">
+                    <div className="text-sm text-gray-400 mb-2">Security Level</div>
+                    <div className="cyber-title text-2xl text-green-400">{userScore.level}</div>
+                  </div>
+
+                  <div className="glass-card p-6 text-center">
+                    <div className="text-sm text-gray-400 mb-2">Total Scans</div>
+                    <div className="cyber-title text-5xl text-purple-400">{userScore.totalScans}</div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="glass-card p-8">
+              <h3 className="cyber-title text-2xl mb-4">Recent Activity</h3>
+              {userScore && userScore.recentScans && userScore.recentScans.length > 0 ? (
+                <div className="space-y-3">
+                  {userScore.recentScans.map((scan, idx) => (
+                    <div key={idx} className="glass-card p-4 flex justify-between items-center">
+                      <div>
+                        <div className="font-bold">{scan.type.toUpperCase()} Scan</div>
+                        <div className="text-sm text-gray-400">
+                          {new Date(scan.timestamp).toLocaleString()}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className={`cyber-title ${scan.result.riskLevel === 'safe' ? 'text-green-400' : 'text-red-400'}`}>
+                          {scan.result.riskLevel}
+                        </div>
+                        <a
+                          href={`${API_URL}/download-report/${scan.id}`}
+                          download
+                          className="text-xs bg-cyan-600/30 hover:bg-cyan-600/50 p-2 rounded transition"
+                        >
+                          📥 Report
+                        </a>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center text-gray-400 py-8">
+                  No scans yet. Start protecting yourself!
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ============================================
+    // REPORT SCAM
+    // ============================================
+    function ReportScam({ userId, setPage }) {
+      const [formData, setFormData] = useState({
+        type: 'url',
+        content: '',
+        description: ''
+      });
+      const [loading, setLoading] = useState(false);
+      const [status, setStatus] = useState(null);
+
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!formData.content) return;
+
+        setLoading(true);
+        try {
+          const response = await fetch(`${API_URL}/report`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...formData, userId })
+          });
+          const data = await response.json();
+          if (data.success) {
+            setStatus({ type: 'success', message: 'Report submitted! Thank you for helping keep the community safe.' });
+            setFormData({ type: 'url', content: '', description: '' });
+          } else {
+            setStatus({ type: 'error', message: 'Failed to submit report. Please try again.' });
+          }
+        } catch (error) {
+          setStatus({ type: 'error', message: 'Connection error. Please try again later.' });
+        }
+        setLoading(false);
+      };
+
+      return (
+        <div className="min-h-screen p-4">
+          <div className="max-w-4xl mx-auto">
+            <BackButton setPage={setPage} />
+
+            <div className="glass-card p-8">
+              <h2 className="cyber-title text-4xl neon-glow mb-6">🚩 REPORT A SCAM</h2>
+
+              {status && (
+                <div className={`p-4 rounded-lg mb-6 ${status.type === 'success' ? 'bg-green-600/20 border border-green-500 text-green-400' : 'bg-red-600/20 border border-red-500 text-red-400'}`}>
+                  {status.message}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-cyan-400 mb-2 font-bold">SCAM TYPE</label>
+                  <select
+                    value={formData.type}
+                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                    className="w-full bg-black/50 border-2 border-cyan-500/30 rounded-lg px-4 py-3 text-white focus:border-cyan-500 outline-none"
+                  >
+                    <option value="url">Malicious URL / Website</option>
+                    <option value="message">Phishing Message / Email</option>
+                    <option value="call">Scam Call / SMS</option>
+                    <option value="other">Other Threat</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-cyan-400 mb-2 font-bold">SCAM CONTENT (URL or Message Text)</label>
+                  <textarea
+                    value={formData.content}
+                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                    placeholder="Paste the suspicious link or message here..."
+                    className="w-full bg-black/50 border-2 border-cyan-500/30 rounded-lg px-4 py-3 text-white focus:border-cyan-500 outline-none h-32"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-cyan-400 mb-2 font-bold">ADDITIONAL DETAILS (Optional)</label>
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    placeholder="Tell us what happened..."
+                    className="w-full bg-black/50 border-2 border-cyan-500/30 rounded-lg px-4 py-3 text-white focus:border-cyan-500 outline-none h-32"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="cyber-button w-full py-4 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 rounded-lg font-bold text-lg disabled:opacity-50"
+                >
+                  {loading ? 'SUBMITTING...' : 'SUBMIT REPORT'}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ============================================
+    // CHAT ASSISTANT
+    // ============================================
+    function ChatAssistant() {
+      const [isOpen, setIsOpen] = useState(false);
+      const [messages, setMessages] = useState([
+        { role: 'bot', text: 'Hello! I am CyberGuard AI. I can help you identify scams and stay safe online. What can I do for you today?' }
+      ]);
+      const [input, setInput] = useState('');
+      const scrollRef = useRef(null);
+
+      useEffect(() => {
+        if (scrollRef.current) {
+          scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+      }, [messages]);
+
+      const handleSend = () => {
+        if (!input.trim()) return;
+
+        const userMsg = { role: 'user', text: input };
+        setMessages(prev => [...prev, userMsg]);
+        setInput('');
+
+        // Simple bot logic
+        setTimeout(() => {
+          let botResponse = "I'm not sure about that. Try using one of our specialized scanners for links, messages, or passwords!";
+
+          const text = input.toLowerCase();
+          if (text.includes('hello') || text.includes('hi')) {
+            botResponse = "Hello! Ready to scan something suspicious?";
+          } else if (text.includes('link') || text.includes('url')) {
+            botResponse = "To scan a link, use the URL Scanner on the home page. I can check for phishing and malicious sites.";
+          } else if (text.includes('password')) {
+            botResponse = "Our Password Checker can show you how long it takes for a hacker to crack your secrets. Try it out!";
+          } else if (text.includes('safe')) {
+            botResponse = "The best way to stay safe is to 'Think Before You Click'. Always verify the source of messages!";
+          }
+
+          setMessages(prev => [...prev, { role: 'bot', text: botResponse }]);
+        }, 1000);
+      };
+
+      return (
+        <div className="fixed bottom-6 right-6 z-50">
+          {!isOpen ? (
+            <button
+              onClick={() => setIsOpen(true)}
+              className="w-16 h-16 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full shadow-lg flex items-center justify-center text-3xl hover:scale-110 transition pulse"
+            >
+              🤖
+            </button>
+          ) : (
+            <div className="glass-card w-80 md:w-96 flex flex-col overflow-hidden h-96 shadow-2xl border-2 border-cyan-500">
+              <div className="bg-gradient-to-r from-cyan-600 to-blue-700 p-4 flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">🤖</span>
+                  <span className="font-bold">CyberGuard AI Assistant</span>
+                </div>
+                <button onClick={() => setIsOpen(false)} className="text-xl">✕</button>
+              </div>
+
+              <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-black/40">
+                {messages.map((msg, idx) => (
+                  <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`max-w-[80%] p-3 rounded-lg ${msg.role === 'user' ? 'bg-cyan-600 text-white rounded-br-none' : 'bg-gray-800 text-gray-200 rounded-bl-none border border-gray-700'}`}>
+                      {msg.text}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="p-4 bg-black/60 flex gap-2">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                  placeholder="Ask me anything..."
+                  className="flex-1 bg-gray-900 border border-gray-700/50 rounded px-3 py-2 text-sm focus:outline-none focus:border-cyan-500"
+                />
+                <button
+                  onClick={handleSend}
+                  className="bg-cyan-600 hover:bg-cyan-500 px-3 py-2 rounded transition"
+                >
+                  ➤
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ============================================
+    // ADMIN DASHBOARD
+    // ============================================
+    function AdminDashboard({ setPage }) {
+      const [stats, setStats] = useState(null);
+
+      useEffect(() => {
+        fetch(`${API_URL}/admin/stats`)
+          .then(res => res.json())
+          .then(data => setStats(data))
+          .catch(() => { });
+      }, []);
+
+      return (
+        <div className="min-h-screen p-4">
+          <div className="max-w-6xl mx-auto">
+            <BackButton setPage={setPage} />
+
+            <div className="glass-card p-8 mb-6">
+              <h2 className="cyber-title text-4xl neon-glow mb-6">ADMIN CONTROL CENTER</h2>
+
+              {stats && (
+                <>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <StatCard title="Total Scans" value={stats.totalScans} color="cyan" />
+                    <StatCard title="Scams Prevented" value={stats.scamsPrevented} color="green" />
+                    <StatCard title="URL Scans" value={stats.threatCounts.url || 0} color="blue" />
+                    <StatCard title="Message Scans" value={stats.threatCounts.message || 0} color="purple" />
+                  </div>
+
+                  <div className="glass-card p-6 mb-6">
+                    <h3 className="cyber-title text-2xl mb-4">Risk Level Distribution</h3>
+                    <div className="space-y-2">
+                      {Object.entries(stats.riskLevels).map(([level, count]) => (
+                        <div key={level} className="flex items-center gap-4">
+                          <div className="w-24 text-sm uppercase">{level}</div>
+                          <div className="flex-1 bg-gray-700 h-8 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-gradient-to-r from-cyan-500 to-blue-500"
+                              style={{ width: `${(count / stats.totalScans * 100) || 0}%` }}
+                            ></div>
+                          </div>
+                          <div className="w-16 text-right">{count}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function StatCard({ title, value, color }) {
+      const colors = {
+        cyan: 'text-cyan-400',
+        green: 'text-green-400',
+        blue: 'text-blue-400',
+        purple: 'text-purple-400'
+      };
+
+      return (
+        <div className="glass-card p-6 text-center">
+          <div className="text-sm text-gray-400 mb-2">{title}</div>
+          <div className={`cyber-title text-4xl ${colors[color]}`}>{value}</div>
+        </div>
+      );
+    }
+
+    // ============================================
+    // THREAT MAP
+    // ============================================
+    function ThreatMap({ setPage }) {
+      const [threats, setThreats] = useState([]);
+
+      useEffect(() => {
+        const fetchThreats = () => {
+          fetch(`${API_URL}/threats/live`)
+            .then(res => res.json())
+            .then(data => setThreats(data.threats || []))
+            .catch(() => { });
+        };
+
+        fetchThreats();
+        const interval = setInterval(fetchThreats, 5000);
+        return () => clearInterval(interval);
+      }, []);
+
+      return (
+        <div className="min-h-screen p-4">
+          <div className="max-w-6xl mx-auto">
+            <BackButton setPage={setPage} />
+
+            <div className="glass-card p-8">
+              <h2 className="cyber-title text-4xl neon-glow mb-6">🌍 LIVE THREAT MAP</h2>
+
+              <div className="mb-6 text-center">
+                <div className="text-sm text-gray-400">Real-time Global Cyber Attacks</div>
+                <div className="cyber-title text-2xl text-red-400 pulse">ACTIVE MONITORING</div>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[600px] overflow-y-auto">
+                {threats.map((threat, idx) => (
+                  <div key={threat.id} className="glass-card p-4 fade-in" style={{ animationDelay: `${idx * 0.1}s` }}>
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full bg-red-500 threat-ping"></div>
+                        <span className="font-bold text-red-400">{threat.type.toUpperCase()}</span>
+                      </div>
+                    </div>
+                    <div className="text-cyan-400">{threat.location.city}, {threat.location.country}</div>
+                    <div className="text-xs text-gray-400 mt-2">
+                      {new Date(threat.timestamp).toLocaleTimeString()}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ============================================
+    // LEARNING CENTER
+    // ============================================
+    function LearningCenter({ setPage }) {
+      const [selectedLesson, setSelectedLesson] = useState(null);
+
+      const lessons = [
+        {
+          title: 'How Phishing Works',
+          icon: '🎣',
+          content: 'Phishing is when criminals pretend to be someone you trust to steal your information. They create fake emails, messages, or websites that look real. Always verify the sender before clicking links or sharing information.'
+        },
+        {
+          title: 'Recognizing Scam Messages',
+          icon: '💬',
+          content: 'Scam messages often use urgency ("Act now!"), promises ("You won a prize!"), or threats ("Your account will be suspended"). Legitimate companies never ask for passwords or OTPs via message.'
+        },
+        {
+          title: 'Creating Strong Passwords',
+          icon: '🔐',
+          content: 'Strong passwords are long (12+ characters), use uppercase, lowercase, numbers, and symbols. Avoid common words or personal information. Use a password manager to generate and store unique passwords for each account.'
+        },
+        {
+          title: 'Safe File Handling',
+          icon: '📁',
+          content: 'Never open attachments from unknown senders. Be suspicious of double extensions like .pdf.exe. Only download software from official sources. Always scan files with antivirus before opening.'
+        },
+        {
+          title: 'Two-Factor Authentication',
+          icon: '🔑',
+          content: '2FA adds an extra layer of security. Even if someone steals your password, they can\'t access your account without the second factor (usually a code sent to your phone). Enable it on all important accounts.'
+        },
+        {
+          title: 'What Hackers Think',
+          icon: '🧠',
+          content: 'Hackers exploit human psychology. They rely on fear, greed, curiosity, or urgency to make you act without thinking. The best defense is to slow down and verify before taking any action.'
+        }
+      ];
+
+      return (
+        <div className="min-h-screen p-4">
+          <div className="max-w-6xl mx-auto">
+            <BackButton setPage={setPage} />
+
+            <div className="glass-card p-8 mb-6">
+              <h2 className="cyber-title text-4xl neon-glow mb-6">🎓 LEARNING CENTER</h2>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {lessons.map((lesson, idx) => (
+                  <div
+                    key={idx}
+                    onClick={() => setSelectedLesson(lesson)}
+                    className="glass-card p-6 cursor-pointer hover:scale-105 transition"
+                  >
+                    <div className="text-5xl mb-3">{lesson.icon}</div>
+                    <h3 className="cyber-title text-lg text-cyan-400">{lesson.title}</h3>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {selectedLesson && (
+              <div className="glass-card p-8 fade-in">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="cyber-title text-3xl neon-glow">{selectedLesson.title}</h3>
+                  <button
+                    onClick={() => setSelectedLesson(null)}
+                    className="text-2xl hover:text-red-400 transition"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div className="text-5xl mb-4">{selectedLesson.icon}</div>
+                <p className="text-lg leading-relaxed text-gray-300">{selectedLesson.content}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // ============================================
+    // UTILITY COMPONENTS
+    // ============================================
+    function BackButton({ setPage }) {
+      return (
+        <button
+          onClick={() => setPage('landing')}
+          className="cyber-button mb-6 px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg transition flex items-center gap-2"
+        >
+          ← Back to Home
+        </button>
+      );
+    }
+
+    function LoadingAnimation({ message = 'Analyzing...' }) {
+      return (
+        <div className="glass-card p-8 text-center fade-in">
+          <div className="relative h-32 mb-6">
+            <div className="scan-line"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="spinner"></div>
+            </div>
+          </div>
+          <div className="terminal-text text-xl">{message}</div>
+          <div className="text-gray-400 mt-2">This may take a few seconds</div>
+        </div>
+      );
+    }
+
+    // ============================================
+    // RENDER APP
+    // ============================================
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+
+</html>
